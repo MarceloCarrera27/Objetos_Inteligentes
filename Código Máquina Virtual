@@ -1,0 +1,4 @@
+const d = new Date();
+let x = d.toLocaleTimeString();
+msg.payload = "Seu cachorro foi alimentado as:  " + x;
+return msg;
