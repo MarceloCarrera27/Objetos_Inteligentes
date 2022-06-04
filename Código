@@ -1,0 +1,45 @@
+#include "Arduino.h"
+#include "ESP8266.h"
+#include "PIR.h"
+#include "Servo.h"
+
+#define ESP8266_PIN_RX	10
+#define ESP8266_PIN_TX	11
+#define PIR_PIN_SIG	4
+#define SERVOSM_PIN_SIG	3
+
+const int ServoRestPosition   = 20;
+const int ServoTargetPosition = 150; 
+
+ESP8266 wifi(ESP8266_PIN_RX,ESP8266_PIN_TX);
+Servo servo;
+PIR pir(PIR_PIN_SIG);
+
+int pirCounter = 0;
+
+void setup() {
+    Serial.begin(9600);
+    Serial.println("start");
+    
+    servo.attach(SERVOSM_PIN_SIG);
+    servo.write(ServoRestPosition);
+    delay(100);
+    servo.detach();
+}
+
+void loop() {
+
+    bool pirVal = pir.read();
+    
+    if (pirVal)
+    {
+        pirCounter++;
+        
+        servo.attach(SERVOSM_PIN_SIG);       
+        servo.write(ServoTargetPosition);
+        delay(500);                              
+        servo.write(ServoRestPosition);    
+        delay(500);                              
+        servo.detach();                                                                    
+    }
+}
